@@ -1,0 +1,72 @@
+type Pair @entity {
+  id: String!
+  token0: Bytes!
+  token1: Bytes!
+  strategies: [Strategy!]! @derivedFrom(field: "pair")
+  orders: [Order!]! @derivedFrom(field: "pair")
+  trades: [Trade!]! @derivedFrom(field: "pair")
+  events: [Event!]!
+  createdAtTimestamp: BigInt!
+}
+
+type Strategy @entity {
+  id: String!
+  owner: User!
+  pair: Pair!
+  token0: Bytes!
+  token1: Bytes!
+  order0: Order!
+  order1: Order!
+  events: [Event!]!
+  createdAtTimestamp: BigInt!
+  updatedAtTimestamp: BigInt
+  deletedAtTimestamp: BigInt
+}
+
+enum OrderType {
+  order0
+  order1
+}
+
+type Order @entity {
+  id: String!
+  type: OrderType!
+  owner: User!
+  pair: Pair!
+  strategy: Strategy!
+  y: BigInt!
+  z: BigInt!
+  A: BigInt!
+  B: BigInt!
+}
+
+type Trade @entity(immutable: true) {
+  id: Bytes!
+  trader: User!
+  pair: Pair!
+  sourceToken: Bytes!
+  targetToken: Bytes!
+  sourceAmount: BigInt!
+  targetAmount: BigInt!
+  tradingFeeAmount: BigInt!
+  byTargetAmount: Boolean!
+  events: [Event!]!
+  createdAtTimestamp: BigInt!
+}
+
+type User @entity {
+  id: Bytes!
+  trades: [Trade!]! @derivedFrom(field: "trader")
+  strategies: [Strategy!]! @derivedFrom(field: "owner")
+  orders: [Order!]! @derivedFrom(field: "owner")
+  createdAtTimestamp: BigInt!
+}
+
+type Event @entity(immutable: true) {
+  id: Bytes!
+  name: String!
+  data: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

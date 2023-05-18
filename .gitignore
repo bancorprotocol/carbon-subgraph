@@ -1,0 +1,10 @@
+node_modules
+build
+generated
+
+.env
+
+yarn.lock
+yarn-error.log
+
+.idea

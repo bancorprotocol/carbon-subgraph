@@ -1,0 +1,59 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: CarbonController
+    network: mainnet
+    source:
+      address: "0xC537e898CD774e2dCBa3B14Ea6f34C93d5eA45e1"
+      abi: CarbonController
+      startBlock: 17087375
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Pair
+        - Strategy
+        - Order
+        - Trade
+        - User
+        - Event
+      abis:
+        - name: CarbonController
+          file: ./abis/CarbonController.json
+      eventHandlers:
+        - event: PairCreated(indexed uint128,indexed address,indexed address)
+          handler: handlePairCreated
+        - event: StrategyCreated(uint256,indexed address,indexed address,indexed address,(uint128,uint128,uint64,uint64),(uint128,uint128,uint64,uint64))
+          handler: handleStrategyCreated
+        - event: StrategyDeleted(uint256,indexed address,indexed address,indexed address,(uint128,uint128,uint64,uint64),(uint128,uint128,uint64,uint64))
+          handler: handleStrategyDeleted
+        - event: StrategyUpdated(indexed uint256,indexed address,indexed address,(uint128,uint128,uint64,uint64),(uint128,uint128,uint64,uint64),uint8)
+          handler: handleStrategyUpdated
+        - event: TokensTraded(indexed address,indexed address,indexed address,uint256,uint256,uint128,bool)
+          handler: handleTokensTraded
+        - event: TradingFeePPMUpdated(uint32,uint32)
+          handler: handleTradingFeePPMUpdated
+      file: ./src/controller/index.ts
+  - kind: ethereum
+    name: CarbonVoucher
+    network: mainnet
+    source:
+      address: "0x3660F04B79751e31128f6378eAC70807e38f554E"
+      abi: CarbonVoucher
+      startBlock: 17087375
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Transfer
+      abis:
+        - name: CarbonVoucher
+          file: ./abis/CarbonVoucher.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,indexed uint256)
+          handler: handleTransfer
+      file: ./src/voucher/index.ts
