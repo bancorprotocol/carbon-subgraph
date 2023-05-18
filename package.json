@@ -4,7 +4,7 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --node https://api.studio.thegraph.com/deploy/ carbon-test",
+    "deploy": "graph deploy --studio carbon-test",
     "create-local": "graph create --node http://localhost:8020/ carbon-test",
     "remove-local": "graph remove --node http://localhost:8020/ carbon-test",
     "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 carbon-test",
