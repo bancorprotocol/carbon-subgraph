@@ -11,7 +11,7 @@ export function handleTradingFeePPMUpdated(
   entity.newFeePPM = event.params.newFeePPM;
 
   entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
+  entity.createdAtTimestamp = event.block.timestamp;
   entity.transactionHash = event.transaction.hash;
 
   entity.save();
