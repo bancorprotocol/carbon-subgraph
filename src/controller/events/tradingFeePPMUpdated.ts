@@ -7,6 +7,7 @@ export function handleTradingFeePPMUpdated(
   let entity = new TradingFeePPMUpdated(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
+
   entity.prevFeePPM = event.params.prevFeePPM;
   entity.newFeePPM = event.params.newFeePPM;
 
