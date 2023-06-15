@@ -20,9 +20,12 @@ dataSources:
         - Trade
         - User
         - Event
+        - Token
       abis:
         - name: CarbonController
           file: ./abis/CarbonController.json
+        - name: ERC20Contract
+          file: ./abis/ERC20Contract.json
       eventHandlers:
         - event: PairCreated(indexed uint128,indexed address,indexed address)
           handler: handlePairCreated

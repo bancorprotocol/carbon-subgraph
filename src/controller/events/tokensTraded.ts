@@ -1,6 +1,6 @@
 import { TokensTraded as TokensTradedEvent } from "./../../../generated/CarbonController/CarbonController";
 import { Event, Trade } from "./../../../generated/schema";
-import { findOrCreateUser, getPairID } from "./../../utils";
+import { findOrCreateToken, findOrCreateUser, getPairID } from "./../../utils";
 import { Bytes } from "@graphprotocol/graph-ts";
 
 function addTokensTradedEvent(event: TokensTradedEvent): Bytes {
@@ -34,8 +34,14 @@ export function handleTokensTraded(event: TokensTradedEvent): void {
     event.block.timestamp
   ).id;
   newTrade.pair = getPairID(event.params.sourceToken, event.params.targetToken);
-  newTrade.sourceToken = event.params.sourceToken;
-  newTrade.targetToken = event.params.targetToken;
+  newTrade.sourceToken = findOrCreateToken(
+    event.params.sourceToken,
+    event.block.timestamp
+  ).id;
+  newTrade.targetToken = findOrCreateToken(
+    event.params.targetToken,
+    event.block.timestamp
+  ).id;
   newTrade.sourceAmount = event.params.sourceAmount;
   newTrade.targetAmount = event.params.targetAmount;
   newTrade.tradingFeeAmount = event.params.tradingFeeAmount;

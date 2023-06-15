@@ -1,7 +1,15 @@
+type Token @entity {
+  id: Bytes!
+  name: String!
+  symbol: String!
+  decimals: Int!
+  createdAtTimestamp: BigInt!
+}
+
 type Pair @entity {
   id: String!
-  token0: Bytes!
-  token1: Bytes!
+  token0: Token!
+  token1: Token!
   strategies: [Strategy!]! @derivedFrom(field: "pair")
   orders: [Order!]! @derivedFrom(field: "pair")
   trades: [Trade!]! @derivedFrom(field: "pair")
@@ -13,8 +21,8 @@ type Strategy @entity {
   id: String!
   owner: User!
   pair: Pair!
-  token0: Bytes!
-  token1: Bytes!
+  token0: Token!
+  token1: Token!
   order0: Order!
   order1: Order!
   events: [Event!]!
@@ -34,6 +42,8 @@ type Order @entity {
   owner: User!
   pair: Pair!
   strategy: Strategy!
+  inputToken: Token!
+  outputToken: Token!
   y: BigInt!
   z: BigInt!
   A: BigInt!
@@ -44,8 +54,8 @@ type Trade @entity(immutable: true) {
   id: Bytes!
   trader: User!
   pair: Pair!
-  sourceToken: Bytes!
-  targetToken: Bytes!
+  sourceToken: Token!
+  targetToken: Token!
   sourceAmount: BigInt!
   targetAmount: BigInt!
   tradingFeeAmount: BigInt!

@@ -1,5 +1,5 @@
 import { PairCreated as PairCreatedEvent } from "./../../../generated/CarbonController/CarbonController";
-import { getPairID } from "./../../utils";
+import { findOrCreateToken, getPairID } from "./../../utils";
 import { Event, Pair } from "./../../../generated/schema";
 import { Bytes } from "@graphprotocol/graph-ts";
 
@@ -21,13 +21,13 @@ function addPairCreatedEvent(event: PairCreatedEvent): Bytes {
 }
 
 export function handlePairCreated(event: PairCreatedEvent): void {
-  let token0 = event.params.token0;
-  let token1 = event.params.token1;
-  let id = getPairID(token0, token1);
+  let token0 = findOrCreateToken(event.params.token0, event.block.timestamp);
+  let token1 = findOrCreateToken(event.params.token1, event.block.timestamp);
+  let id = getPairID(token0.id, token1.id);
 
   let newPair = new Pair(id);
-  newPair.token0 = token0;
-  newPair.token1 = token1;
+  newPair.token0 = token0.id;
+  newPair.token1 = token1.id;
   newPair.createdAtTimestamp = event.block.timestamp;
   newPair.events = [addPairCreatedEvent(event)];
   newPair.save();

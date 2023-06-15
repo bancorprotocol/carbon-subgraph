@@ -1,6 +1,6 @@
 import { StrategyCreated as StrategyCreatedEvent } from "./../../../generated/CarbonController/CarbonController";
 import { Event, Order, Strategy } from "./../../../generated/schema";
-import { findOrCreateUser, getPairID } from "./../../utils";
+import { findOrCreateToken, findOrCreateUser, getPairID } from "./../../utils";
 import { Bytes } from "@graphprotocol/graph-ts";
 
 function addStrategyCreatedEvent(event: StrategyCreatedEvent): Bytes {
@@ -37,20 +37,22 @@ function addStrategyCreatedEvent(event: StrategyCreatedEvent): Bytes {
 export function handleStrategyCreated(event: StrategyCreatedEvent): void {
   let id = event.params.id.toString();
   let owner = findOrCreateUser(event.params.owner, event.block.timestamp);
-  let token0 = event.params.token0;
-  let token1 = event.params.token1;
+  let token0 = findOrCreateToken(event.params.token0, event.block.timestamp);
+  let token1 = findOrCreateToken(event.params.token1, event.block.timestamp);
   let order0 = event.params.order0;
   let order1 = event.params.order1;
-  let pairId = getPairID(token0, token1);
+  let pairId = getPairID(token0.id, token1.id);
 
   let newStrategy = new Strategy(id);
-  let newOrder0 = new Order(`${newStrategy.id}-0`);
-  let newOrder1 = new Order(`${newStrategy.id}-1`);
+  let newOrder0 = new Order(`${id}-0`);
+  let newOrder1 = new Order(`${id}-1`);
 
   newOrder0.type = "order0";
   newOrder0.strategy = id;
   newOrder0.owner = owner.id;
   newOrder0.pair = pairId;
+  newOrder0.inputToken = token1.id;
+  newOrder0.outputToken = token0.id;
   newOrder0.A = order0.A;
   newOrder0.B = order0.B;
   newOrder0.z = order0.z;
@@ -61,6 +63,8 @@ export function handleStrategyCreated(event: StrategyCreatedEvent): void {
   newOrder1.strategy = id;
   newOrder1.owner = owner.id;
   newOrder1.pair = pairId;
+  newOrder1.inputToken = token0.id;
+  newOrder1.outputToken = token1.id;
   newOrder1.A = order1.A;
   newOrder1.B = order1.B;
   newOrder1.z = order1.z;
@@ -69,8 +73,8 @@ export function handleStrategyCreated(event: StrategyCreatedEvent): void {
 
   newStrategy.owner = owner.id;
   newStrategy.pair = pairId;
-  newStrategy.token0 = token0;
-  newStrategy.token1 = token1;
+  newStrategy.token0 = token0.id;
+  newStrategy.token1 = token1.id;
   newStrategy.order0 = newOrder0.id;
   newStrategy.order1 = newOrder1.id;
   newStrategy.createdAtTimestamp = event.block.timestamp;
