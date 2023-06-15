@@ -5,13 +5,13 @@ import { findOrCreateUser, NULL_ADDRESS } from "./../../utils";
 export function handleTransfer(event: TransferEvent): void {
   let from = event.params.from.toHexString();
   if (from == NULL_ADDRESS) {
-    // TODO Mint event, ignore this transfer
+    // Mint event, ignore this transfer
     return;
   }
 
   let to = event.params.to;
   if (to.toHexString() == NULL_ADDRESS) {
-    // TODO Burn event, ignore this transfer
+    // Burn event, ignore this transfer
     return;
   }
   let owner = findOrCreateUser(to, event.block.timestamp).id;

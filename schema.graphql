@@ -13,8 +13,26 @@ type Pair @entity {
   strategies: [Strategy!]! @derivedFrom(field: "pair")
   orders: [Order!]! @derivedFrom(field: "pair")
   trades: [Trade!]! @derivedFrom(field: "pair")
-  events: [Event!]!
   createdAtTimestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
+}
+
+type StrategyEvent @entity(immutable: true) {
+  id: Bytes!
+  eventName: String!
+  newOwner: Bytes
+  newOrder0_y: BigInt
+  newOrder0_z: BigInt
+  newOrder0_A: BigInt
+  newOrder0_B: BigInt
+  newOrder1_y: BigInt
+  newOrder1_z: BigInt
+  newOrder1_A: BigInt
+  newOrder1_B: BigInt
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
 }
 
 type Strategy @entity {
@@ -25,7 +43,7 @@ type Strategy @entity {
   token1: Token!
   order0: Order!
   order1: Order!
-  events: [Event!]!
+  events: [StrategyEvent!]!
   createdAtTimestamp: BigInt!
   updatedAtTimestamp: BigInt
   deletedAtTimestamp: BigInt
@@ -60,8 +78,9 @@ type Trade @entity(immutable: true) {
   targetAmount: BigInt!
   tradingFeeAmount: BigInt!
   byTargetAmount: Boolean!
-  events: [Event!]!
   createdAtTimestamp: BigInt!
+  blockNumber: BigInt!
+  transactionHash: Bytes!
 }
 
 type User @entity {
@@ -72,11 +91,11 @@ type User @entity {
   createdAtTimestamp: BigInt!
 }
 
-type Event @entity(immutable: true) {
+type TradingFeePPMUpdated @entity(immutable: true) {
   id: Bytes!
-  name: String!
-  data: String!
+  prevFeePPM: BigInt! # uint32
+  newFeePPM: BigInt! # uint32
   blockNumber: BigInt!
-  blockTimestamp: BigInt!
+  createdAtTimestamp: BigInt!
   transactionHash: Bytes!
 }

@@ -1,38 +1,7 @@
 import { StrategyCreated as StrategyCreatedEvent } from "./../../../generated/CarbonController/CarbonController";
-import { Event, Order, Strategy } from "./../../../generated/schema";
+import { StrategyEvent, Order, Strategy } from "./../../../generated/schema";
 import { findOrCreateToken, findOrCreateUser, getPairID } from "./../../utils";
 import { Bytes } from "@graphprotocol/graph-ts";
-
-function addStrategyCreatedEvent(event: StrategyCreatedEvent): Bytes {
-  let newEvent = new Event(
-    event.transaction.hash.concatI32(event.logIndex.toI32())
-  );
-  newEvent.name = "StrategyCreated";
-  newEvent.data = `{
-    "id": "${event.params.id.toString()}",
-    "owner": "${event.params.owner.toString()}",
-    "token0": "${event.params.token0.toString()}",
-    "token1": "${event.params.token1.toString()}",
-    "order0": {
-        "A": "${event.params.order0.A.toString()}",
-        "B": "${event.params.order0.B.toString()}",
-        "z": "${event.params.order0.z.toString()}",
-        "y": "${event.params.order0.y.toString()}"
-    },
-    "order1": {
-        "A": "${event.params.order1.A.toString()}",
-        "B": "${event.params.order1.B.toString()}",
-        "z": "${event.params.order1.z.toString()}",
-        "y": "${event.params.order1.y.toString()}"
-    }
-  }`;
-  newEvent.transactionHash = event.transaction.hash;
-  newEvent.blockNumber = event.block.number;
-  newEvent.blockTimestamp = event.block.timestamp;
-  newEvent.save();
-
-  return newEvent.id;
-}
 
 export function handleStrategyCreated(event: StrategyCreatedEvent): void {
   let id = event.params.id.toString();
@@ -80,4 +49,26 @@ export function handleStrategyCreated(event: StrategyCreatedEvent): void {
   newStrategy.createdAtTimestamp = event.block.timestamp;
   newStrategy.events = [addStrategyCreatedEvent(event)];
   newStrategy.save();
+}
+
+function addStrategyCreatedEvent(event: StrategyCreatedEvent): Bytes {
+  let newEvent = new StrategyEvent(
+    event.transaction.hash.concatI32(event.logIndex.toI32())
+  );
+  newEvent.eventName = "StrategyCreated";
+  newEvent.newOwner = event.params.owner;
+  newEvent.newOrder0_A = event.params.order0.A;
+  newEvent.newOrder0_B = event.params.order0.B;
+  newEvent.newOrder0_y = event.params.order0.y;
+  newEvent.newOrder0_z = event.params.order0.z;
+  newEvent.newOrder1_A = event.params.order1.A;
+  newEvent.newOrder1_B = event.params.order1.B;
+  newEvent.newOrder1_y = event.params.order1.y;
+  newEvent.newOrder1_z = event.params.order1.z;
+  newEvent.transactionHash = event.transaction.hash;
+  newEvent.blockNumber = event.block.number;
+  newEvent.blockTimestamp = event.block.timestamp;
+  newEvent.save();
+
+  return newEvent.id;
 }

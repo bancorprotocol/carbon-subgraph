@@ -1,4 +1,4 @@
-import {Address, BigInt, Bytes} from "@graphprotocol/graph-ts";
+import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { Token, User } from "./../generated/schema";
 import { ERC20Contract } from "./../generated/CarbonVoucher/ERC20Contract";
 
