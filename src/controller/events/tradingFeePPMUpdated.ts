@@ -1,10 +1,8 @@
-import { TradingFeePPMUpdated as TradingFeePPMUpdatedEvent } from "./../../../generated/CarbonController/CarbonController";
-import { TradingFeePPMUpdated } from "./../../../generated/schema";
+import { TradingFeePPMUpdated as TradingFeeEvent } from "./../../../generated/CarbonController/CarbonController";
+import { TradingFee } from "./../../../generated/schema";
 
-export function handleTradingFeePPMUpdated(
-  event: TradingFeePPMUpdatedEvent
-): void {
-  let entity = new TradingFeePPMUpdated(
+export function handleTradingFeePPMUpdated(event: TradingFeeEvent): void {
+  let entity = new TradingFee(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );
 

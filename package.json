@@ -4,10 +4,10 @@
   "scripts": {
     "codegen": "graph codegen",
     "build": "graph build",
-    "deploy": "graph deploy --studio carbon-test",
-    "create-local": "graph create --node http://localhost:8020/ carbon-test",
-    "remove-local": "graph remove --node http://localhost:8020/ carbon-test",
-    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 carbon-test",
+    "deploy": "graph deploy --studio carbon",
+    "create-local": "graph create --node http://localhost:8020/ carbon",
+    "remove-local": "graph remove --node http://localhost:8020/ carbon",
+    "deploy-local": "graph deploy --node http://localhost:8020/ --ipfs http://localhost:5001 carbon",
     "test": "graph test"
   },
   "dependencies": {

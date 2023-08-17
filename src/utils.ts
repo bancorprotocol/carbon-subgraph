@@ -1,6 +1,6 @@
 import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
 import { Token, User } from "./../generated/schema";
-import { ERC20Contract } from "./../generated/CarbonVoucher/ERC20Contract";
+import { ERC20Contract } from "./../generated/CarbonController/ERC20Contract";
 
 export let NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 export let ETH_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
