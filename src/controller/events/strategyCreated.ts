@@ -1,9 +1,21 @@
 import { StrategyCreated as StrategyCreatedEvent } from "./../../../generated/CarbonController/CarbonController";
 import { StrategyEvent, Order, Strategy } from "./../../../generated/schema";
-import { findOrCreateToken, findOrCreateUser, getPairID } from "./../../utils";
-import { Bytes } from "@graphprotocol/graph-ts";
+import {
+  findOrCreateToken,
+  findOrCreateUser,
+  getPairID,
+  getProtocol
+} from "./../../utils";
+import { BigInt, Bytes } from "@graphprotocol/graph-ts";
 
 export function handleStrategyCreated(event: StrategyCreatedEvent): void {
+  const protocol = getProtocol();
+  protocol.strategyCount = protocol.strategyCount.plus(BigInt.fromI32(1));
+  protocol.strategyTotalCount = protocol.strategyTotalCount.plus(
+    BigInt.fromI32(1)
+  );
+  protocol.save();
+
   let id = event.params.id.toString();
   let owner = findOrCreateUser(event.params.owner, event.block.timestamp);
   let token0 = findOrCreateToken(event.params.token0, event.block.timestamp);

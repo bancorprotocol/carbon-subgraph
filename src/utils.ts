@@ -1,9 +1,11 @@
 import { Address, BigInt, Bytes } from "@graphprotocol/graph-ts";
-import { Token, User } from "./../generated/schema";
+import { Protocol, Token, User } from "./../generated/schema";
 import { ERC20Contract } from "./../generated/CarbonController/ERC20Contract";
 
 export let NULL_ADDRESS = "0x0000000000000000000000000000000000000000";
 export let ETH_ADDRESS = "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee";
+export let CARBON_CONTROLLER_ADDRESS =
+  "0xC537e898CD774e2dCBa3B14Ea6f34C93d5eA45e1";
 
 function sortStringsAlphabetically(a: string, b: string): Array<string> {
   return a < b ? [a, b] : [b, a];
@@ -67,4 +69,24 @@ export function findOrCreateToken(id: Address, timestamp: BigInt): Token {
   }
 
   return createERC20Token(id, timestamp);
+}
+
+export function getProtocol(): Protocol {
+  let id = Address.fromString(CARBON_CONTROLLER_ADDRESS);
+  let protocol = Protocol.load(id);
+
+  if (protocol != null) {
+    return protocol;
+  }
+
+  protocol = new Protocol(id);
+  protocol.defaultTradingFeePPM = new BigInt(0);
+  protocol.pairCount = new BigInt(0);
+  protocol.strategyCount = new BigInt(0);
+  protocol.strategyTotalCount = new BigInt(0);
+  protocol.strategyDeletedCount = new BigInt(0);
+  protocol.tradeCount = new BigInt(0);
+  protocol.save();
+
+  return protocol;
 }

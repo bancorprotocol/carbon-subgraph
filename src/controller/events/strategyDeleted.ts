@@ -1,8 +1,16 @@
 import { BigInt, Bytes } from "@graphprotocol/graph-ts";
+import { getProtocol } from "./../../utils";
 import { StrategyDeleted as StrategyDeletedEvent } from "./../../../generated/CarbonController/CarbonController";
 import { StrategyEvent, Order, Strategy } from "./../../../generated/schema";
 
 export function handleStrategyDeleted(event: StrategyDeletedEvent): void {
+  const protocol = getProtocol();
+  protocol.strategyDeletedCount = protocol.strategyDeletedCount.plus(
+    BigInt.fromI32(1)
+  );
+  protocol.strategyCount = protocol.strategyCount.minus(BigInt.fromI32(1));
+  protocol.save();
+
   let id = event.params.id.toString();
 
   let strategy = Strategy.load(id);

@@ -1,4 +1,13 @@
-
+type Protocol @entity {
+  id: Bytes! #factory contract address
+  pairs: [Pair!] @derivedFrom(field: "protocol")
+  defaultTradingFeePPM: BigInt!
+  pairCount: BigInt!
+  strategyTotalCount: BigInt!
+  strategyCount: BigInt!
+  strategyDeletedCount: BigInt!
+  tradeCount: BigInt!
+}
 
 type Token @entity {
   id: Bytes!
@@ -10,12 +19,16 @@ type Token @entity {
 
 type Pair @entity {
   id: String!
+  protocol: Protocol!
   token0: Token!
   token1: Token!
   strategies: [Strategy!]! @derivedFrom(field: "pair")
   orders: [Order!]! @derivedFrom(field: "pair")
   trades: [Trade!]! @derivedFrom(field: "pair")
-  customFees: [PairTradingFee!]! @derivedFrom(field: "pair")
+  customFeeHistory: [PairTradingFee!]! @derivedFrom(field: "pair")
+  _defaultFeePPM: BigInt! # uint32
+  _customFeePPM: BigInt! # uint32
+  tradingFeePPM: BigInt! # uint32
   createdAtTimestamp: BigInt!
   blockNumber: BigInt!
   transactionHash: Bytes!
