@@ -39,6 +39,8 @@ dataSources:
           handler: handleTokensTraded
         - event: TradingFeePPMUpdated(uint32,uint32)
           handler: handleTradingFeePPMUpdated
+        - event: PairTradingFeePPMUpdated(indexed address,indexed address,uint32,uint32)
+          handler: handlePairTradingFeePPMUpdated
       file: ./src/controller/index.ts
   - kind: ethereum
     name: CarbonVoucher
