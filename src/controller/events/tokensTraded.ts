@@ -1,8 +1,18 @@
+import { BigInt } from "@graphprotocol/graph-ts";
 import { TokensTraded as TokensTradedEvent } from "./../../../generated/CarbonController/CarbonController";
 import { Trade } from "./../../../generated/schema";
-import { findOrCreateToken, findOrCreateUser, getPairID } from "./../../utils";
+import {
+  findOrCreateToken,
+  findOrCreateUser,
+  getPairID,
+  getProtocol
+} from "./../../utils";
 
 export function handleTokensTraded(event: TokensTradedEvent): void {
+  const protocol = getProtocol();
+  protocol.tradeCount = protocol.tradeCount.plus(BigInt.fromI32(1));
+  protocol.save();
+
   let newTrade = new Trade(
     event.transaction.hash.concatI32(event.logIndex.toI32())
   );

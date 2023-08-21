@@ -1,3 +1,14 @@
+type Protocol @entity {
+  id: Bytes! #factory contract address
+  pairs: [Pair!] @derivedFrom(field: "protocol")
+  defaultTradingFeePPM: BigInt!
+  pairCount: BigInt!
+  strategyTotalCount: BigInt!
+  strategyCount: BigInt!
+  strategyDeletedCount: BigInt!
+  tradeCount: BigInt!
+}
+
 type Token @entity {
   id: Bytes!
   name: String!
@@ -8,11 +19,16 @@ type Token @entity {
 
 type Pair @entity {
   id: String!
+  protocol: Protocol!
   token0: Token!
   token1: Token!
   strategies: [Strategy!]! @derivedFrom(field: "pair")
   orders: [Order!]! @derivedFrom(field: "pair")
   trades: [Trade!]! @derivedFrom(field: "pair")
+  customTradingFeeHistory: [PairTradingFee!]! @derivedFrom(field: "pair")
+  _defaultTradingFeePPM: BigInt! # uint32
+  _customTradingFeePPM: BigInt! # uint32
+  tradingFeePPM: BigInt! # uint32
   createdAtTimestamp: BigInt!
   blockNumber: BigInt!
   transactionHash: Bytes!
@@ -91,8 +107,20 @@ type User @entity {
   createdAtTimestamp: BigInt!
 }
 
-type TradingFeePPMUpdated @entity(immutable: true) {
+type TradingFee @entity(immutable: true) {
   id: Bytes!
+  prevFeePPM: BigInt! # uint32
+  newFeePPM: BigInt! # uint32
+  blockNumber: BigInt!
+  createdAtTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PairTradingFee @entity(immutable: true) {
+  id: Bytes!
+  pair: Pair!
+  token0: Token!
+  token1: Token!
   prevFeePPM: BigInt! # uint32
   newFeePPM: BigInt! # uint32
   blockNumber: BigInt!
