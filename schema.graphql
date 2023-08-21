@@ -25,7 +25,7 @@ type Pair @entity {
   strategies: [Strategy!]! @derivedFrom(field: "pair")
   orders: [Order!]! @derivedFrom(field: "pair")
   trades: [Trade!]! @derivedFrom(field: "pair")
-  customFeeHistory: [PairTradingFee!]! @derivedFrom(field: "pair")
+  customTradingFeeHistory: [PairTradingFee!]! @derivedFrom(field: "pair")
   _defaultTradingFeePPM: BigInt! # uint32
   _customTradingFeePPM: BigInt! # uint32
   tradingFeePPM: BigInt! # uint32
