@@ -17,8 +17,8 @@ export function handlePairCreated(event: PairCreatedEvent): void {
   newPair.token0 = token0.id;
   newPair.token1 = token1.id;
   newPair.tradingFeePPM = protocol.defaultTradingFeePPM;
-  newPair._defaultFeePPM = protocol.defaultTradingFeePPM;
-  newPair._customFeePPM = new BigInt(0);
+  newPair._defaultTradingFeePPM = protocol.defaultTradingFeePPM;
+  newPair._customTradingFeePPM = new BigInt(0);
   newPair.createdAtTimestamp = event.block.timestamp;
   newPair.transactionHash = event.transaction.hash;
   newPair.blockNumber = event.block.number;

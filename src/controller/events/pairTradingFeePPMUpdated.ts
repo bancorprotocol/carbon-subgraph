@@ -30,10 +30,10 @@ export function handlePairTradingFeePPMUpdated(
   }
 
   let newFeePPM = event.params.newFeePPM;
-  pair._customFeePPM = newFeePPM;
+  pair._customTradingFeePPM = newFeePPM;
 
   if (newFeePPM == new BigInt(0)) {
-    pair.tradingFeePPM = pair._defaultFeePPM;
+    pair.tradingFeePPM = pair._defaultTradingFeePPM;
   } else {
     pair.tradingFeePPM = newFeePPM;
   }

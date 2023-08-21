@@ -29,8 +29,8 @@ export function handleTradingFeePPMUpdated(event: TradingFeeEvent): void {
     let pair = Pair.load(pairs[i]);
 
     if (pair != null) {
-      pair._defaultFeePPM = event.params.newFeePPM;
-      if (pair._customFeePPM == new BigInt(0)) {
+      pair._defaultTradingFeePPM = event.params.newFeePPM;
+      if (pair._customTradingFeePPM == new BigInt(0)) {
         pair.tradingFeePPM = event.params.newFeePPM;
       }
       pair.save();

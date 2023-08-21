@@ -26,8 +26,8 @@ type Pair @entity {
   orders: [Order!]! @derivedFrom(field: "pair")
   trades: [Trade!]! @derivedFrom(field: "pair")
   customFeeHistory: [PairTradingFee!]! @derivedFrom(field: "pair")
-  _defaultFeePPM: BigInt! # uint32
-  _customFeePPM: BigInt! # uint32
+  _defaultTradingFeePPM: BigInt! # uint32
+  _customTradingFeePPM: BigInt! # uint32
   tradingFeePPM: BigInt! # uint32
   createdAtTimestamp: BigInt!
   blockNumber: BigInt!
